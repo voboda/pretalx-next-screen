@@ -8,6 +8,7 @@
   export let roomId = 0;
 
   let interval;
+  let error = false;
 
   // Function to fetch and process schedule
   async function fetchSchedule() {
@@ -18,16 +19,12 @@
       }
       const data = await response.json();
 
-      console.log(room, data)
-
       // Extract upcoming events for the specified room
       const now = new Date();
       const events = data.talks
         .filter(talk => talk.room === parseInt(roomId))
         .filter(talk => new Date(talk.start) > now)
         .sort((a, b) => new Date(a.start) - new Date(b.start));
-
-      console.log(events)
 
       // Set title and time for the next upcoming event
       if (events.length > 0) {
@@ -51,6 +48,7 @@
     roomId = parseInt(queryParams.get("room"), 10);
 
     if (!roomId) {
+      title = "Please specify ?room=X in the url";
       console.error("Room ID not provided or invalid");
       return;
     }
@@ -74,32 +72,36 @@
   </div>
   <div class="logo"><img src="/images/cdc.png" /></div>
 </div>
-<div class="title">{title}</div>
+  {#if error}
+    <div class="title">{error}</div>
+  {:else}
+    <div class="title">{title}</div>
+  {/if}
 </div>
 
 <style>
   @font-face {
     font-family: 'pilowlava';
-    src: URL('fonts/pilowlava/Fonts/webfonts/Pilowlava-Regular.woff2') format('woff2');
+    src: URL('/fonts/pilowlava/Fonts/webfonts/Pilowlava-Regular.woff2') format('woff2');
   }
 
   @font-face {
     font-family: 'spacegrotesk';
-    src: URL('fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Regular.woff2') format('woff2');
-    src: URL('fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Bold.woff2') format('woff2');
-    src: URL('fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Light.woff2') format('woff2');
-    src: URL('fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Medium.woff2') format('woff2');
-    src: URL('fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-SemiBold.woff2') format('woff2');
+    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Regular.woff2') format('woff2');
+    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Bold.woff2') format('woff2');
+    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Light.woff2') format('woff2');
+    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Medium.woff2') format('woff2');
+    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-SemiBold.woff2') format('woff2');
   }
 
   @font-face {
     font-family: 'space-mono';
-    src: URL('fonts/space-mono/SpaceMono-Regular.ttf') format('truetype');
+    src: URL('/fonts/space-mono/SpaceMono-Regular.ttf') format('truetype');
   }
 
   @font-face {
     font-family: 'uncut-sans';
-    src: URL('fonts/uncut-sans/Webfonts/UncutSans-Regular.woff2') format('woff2');
+    src: URL('/fonts/uncut-sans/Webfonts/UncutSans-Regular.woff2') format('woff2');
   }
 
   :global(body) {
