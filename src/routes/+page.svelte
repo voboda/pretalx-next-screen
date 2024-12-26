@@ -20,11 +20,13 @@
       const data = await response.json();
 
       // Extract upcoming events for the specified room
-      const now = new Date();
-      const events = data.talks
+      let now = new Date();
+      //now = Date.parse('27 Dec 2024 18:00:00 GMT');
+
+     const events = data.talks
         .filter(talk => talk.room === parseInt(roomId))
-        .filter(talk => new Date(talk.start) > now)
-        .sort((a, b) => new Date(a.start) - new Date(b.start));
+        .filter(talk => Date.parse(talk.start) > now)
+        .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
 
       // Set title and time for the next upcoming event
       if (events.length > 0) {
@@ -143,7 +145,7 @@
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
     text-align: left;
-    font-size: 3rem;
+    font-size: 6rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #6A5FDB; /* Accent B from guide */
@@ -165,8 +167,8 @@
   }
 
   .logo img {
-    max-width: 30rem;
-    max-height: 10vh;
+    max-width: 40vw;
+    max-height: 20vh;
   }
 
   .header + .time {
@@ -178,7 +180,7 @@
 
   .title {
     height: 95%;
-    font-size: 6rem;
+    font-size: 12rem;
     line-height: 1.1;
     color: #FEF2FF; /* Highlight color from guide */
     text-align: center;
