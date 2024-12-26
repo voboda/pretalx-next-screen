@@ -176,11 +176,12 @@
     position: relative;
     left: 0;
     top: -20px;
+    font-size: 12rem;
   }
 
   .title {
     height: 95%;
-    font-size: 12rem;
+    font-size: 18rem;
     line-height: 1.1;
     color: #FEF2FF; /* Highlight color from guide */
     text-align: center;
