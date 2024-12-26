@@ -31,7 +31,7 @@
       // Set title and time for the next upcoming event
       if (events.length > 0) {
         title = events[0].title;
-        time = new Date(events[0].start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        time = new Date(events[0].start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
       } else {
         title = "No upcoming events";
         time = "";
@@ -158,6 +158,7 @@
     color: #FF5053; /* Primary color from guide */
     margin-left: 10px;
     font-family: 'uncut-sans';
+    font-size: 12rem;
   }
 
   .logo {
@@ -176,7 +177,6 @@
     position: relative;
     left: 0;
     top: -20px;
-    font-size: 12rem;
   }
 
   .title {
