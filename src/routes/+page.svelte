@@ -7,6 +7,7 @@
   export let time = "";
   export let roomId = 0;
 
+        let upcomingTalk 
   let interval;
   let error = false;
 
@@ -32,9 +33,14 @@
       if (events.length > 0) {
         title = events[0].title;
         time = new Date(events[0].start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
+
+        const nextTalkStart = new Date(events[0].start);
+        upcomingTalk = nextTalkStart - now <= 3600000 && nextTalkStart > now;
+        console.log(nextTalkStart, now)
       } else {
         title = "No upcoming events";
         time = "";
+        upcomingTalk = false;
       }
     } catch (error) {
       console.error("Failed to fetch or process schedule:", error);
@@ -68,19 +74,28 @@
 
 <div class="wrapper">
   <div class="main">
-    <div class="header">
-      <div>
-        Up Next
-        <div class="time">{time}</div>
+    {#if upcomingTalk}
+      <div class="header">
+        <div>
+          What's happening 
+          <div class="time">{time}</div>
+        </div>
+        <div class="logo"><img src="/images/cdc.png" /></div>
       </div>
-      <div class="logo"><img src="/images/cdc.png" /></div>
-    </div>
-    {#if error}
-    <div class="title">{error}</div>
+      {#if error}
+        <div class="title">{error}</div>
+      {:else}
+        <div class="title">{title}</div>
+      {/if}
     {:else}
-    <div class="title">{title}</div>
+    <div class="signup">
+      <div>Free spot</div>
+      <div>Run your session now</div>
+      <img src="/images/qr_signup.png" />
+    </div>
+
     {/if}
-  </div>
+ </div>
 </div>
 
 <style>
@@ -183,6 +198,22 @@
     position: relative;
     left: 0;
     top: -20px;
+  }
+
+  .signup {
+    font-family: 'space-mono';
+    font-size: 7vh;
+    line-height: 1.1;
+    text-align:center;
+  }
+
+  .signup > div:first-child {
+    font-size: 60%;
+    text-transform: uppercase;
+    color: #6A5FDB; /* Accent B from guide */
+  }
+  .signup img {
+    margin-top: 3vh;
   }
 
   .title {
