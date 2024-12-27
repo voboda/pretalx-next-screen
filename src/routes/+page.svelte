@@ -13,7 +13,7 @@
   const ROOMS = [
     "CDC Mini-Stage",
     "CDC Pentagon",
-    "CDC Circle"
+    "CDC Circle",
     ]
 
   async function fetchSchedule() {
@@ -112,6 +112,15 @@
       {:else}
         <div class="title">{title}</div>
       {/if}
+    <div class="footer">
+      <div class="room">
+        {ROOMS[roomId-1]}
+      </div>
+      <div class="qr">
+      <img src="/images/qr_schedule.png" />
+      Full schedule
+      </div>
+    </div>
     {:else if status == "upcoming" }
       <div class="header">
         <div>
@@ -122,22 +131,22 @@
       </div>
       <div class="title">{title}
       </div>
-     {:else }
-      <div class="signup">
-        <div>Free spot</div>
-        <div>Run your session now</div>
-        <img src="/images/qr_signup.png" />
-      </div>
-    {/if}
     <div class="footer">
       <div class="room">
-        {ROOMS[roomId]}
+        {ROOMS[roomId-1]}
       </div>
       <div class="qr">
       <img src="/images/qr_schedule.png" />
       Full schedule
       </div>
     </div>
+     {:else }
+      <div class="signup">
+        <div>Free spot @ {ROOMS[roomId-1]}</div>
+        <div>Run your session now</div>
+        <img src="/images/qr_signup.png" />
+      </div>
+    {/if}
  </div>
 </div>
 
