@@ -14,7 +14,7 @@
 
   async function fetchSchedule() {
   try {
-    const response = await fetch("https://pretalx.riat.at/38c3/schedule/v/0.15/widgets/schedule.json");
+    const response = await fetch("https://pretalx.riat.at/38c3/schedule/widgets/schedule.json");
     if (!response.ok) {
       throw new Error(`Error fetching schedule: ${response.statusText}`);
     }
