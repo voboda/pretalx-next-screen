@@ -170,6 +170,7 @@
     padding: 3vh;
     position: relative;
     z-index: 1;
+    overflow: hidden;
   }
 
   .wrapper::before {
