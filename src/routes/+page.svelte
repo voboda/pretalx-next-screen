@@ -100,54 +100,54 @@
 <div class="wrapper">
   <div class="main">
     {#if status == "current" }
-      <div class="header">
-        <div>
-          What's happening 
-          <div class="time">{time}</div>
-        </div>
-        <div class="logo"><img src="/images/cdc.png" /></div>
+    <div class="header">
+      <div>
+        What's happening 
+        <div class="time">{time}</div>
       </div>
-      {#if error}
-        <div class="title">{error}</div>
-      {:else}
-        <div class="title">{title}</div>
-      {/if}
+      <div class="logo"><img src="/images/cdc.png" /></div>
+    </div>
+    {#if error}
+    <div class="title">{error}</div>
+    {:else}
+    <div class="title">{title}</div>
+    {/if}
     <div class="footer">
       <div class="room">
         {ROOMS[roomId-1]}
       </div>
       <div class="qr">
-      <img src="/images/qr_schedule.png" />
-      Full schedule
+        <img src="/images/qr_schedule.png" />
+        Full schedule
       </div>
     </div>
     {:else if status == "upcoming" }
-      <div class="header">
-        <div>
-         Coming up 
-          <div class="time">{time}</div>
-        </div>
-        <div class="logo"><img src="/images/cdc.png" /></div>
+    <div class="header">
+      <div>
+        Coming up 
+        <div class="time">{time}</div>
       </div>
-      <div class="title">{title}
-      </div>
+      <div class="logo"><img src="/images/cdc.png" /></div>
+    </div>
+    <div class="title">{title}
+    </div>
     <div class="footer">
       <div class="room">
         {ROOMS[roomId-1]}
       </div>
       <div class="qr">
-      <img src="/images/qr_schedule.png" />
-      Full schedule
+        <img src="/images/qr_schedule.png" />
+        Full schedule
       </div>
     </div>
-     {:else }
-      <div class="signup">
-        <div>Free spot @ {ROOMS[roomId-1]}</div>
-        <div>Run your session now</div>
-        <img src="/images/qr_signup.png" />
-      </div>
+    {:else }
+    <div class="signup">
+      <div>Free spot @ {ROOMS[roomId-1]}</div>
+      <div>Run your session now</div>
+      <img src="/images/qr_signup.png" />
+    </div>
     {/if}
- </div>
+  </div>
 </div>
 
 <style>
@@ -180,6 +180,8 @@
     position: relative;
     z-index: 1;
     overflow: hidden;
+    aspect-ratio: 16 / 9;
+    width: 95%;
   }
 
   .wrapper::before {
