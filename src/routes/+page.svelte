@@ -124,6 +124,10 @@
         <img src="/images/qr_signup.png" />
       </div>
     {/if}
+    <div class="footer">
+      Full schedule
+      <img src="/images/qr_schedule.png" />
+    </div>
  </div>
 </div>
 
@@ -202,6 +206,23 @@
     color: #6A5FDB; /* Accent B from guide */
     margin: 10px 0;
     font-family: 'pilowlava';
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: 3vw;
+    width: 40%;
+    text-align: left;
+    font-size: 3vh;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 10px 0;
+    font-family: 'uncut-sans';
+  }
+
+  .footer img {
+     height: 18vh;
   }
 
   .time {
