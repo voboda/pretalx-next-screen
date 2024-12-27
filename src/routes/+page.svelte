@@ -66,19 +66,21 @@
   });
 </script>
 
-<div class="main">
-<div class="header">
-  <div>
-    Up Next
-    <div class="time">{time}</div>
-  </div>
-  <div class="logo"><img src="/images/cdc.png" /></div>
-</div>
-  {#if error}
+<div class="wrapper">
+  <div class="main">
+    <div class="header">
+      <div>
+        Up Next
+        <div class="time">{time}</div>
+      </div>
+      <div class="logo"><img src="/images/cdc.png" /></div>
+    </div>
+    {#if error}
     <div class="title">{error}</div>
-  {:else}
+    {:else}
     <div class="title">{title}</div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -106,6 +108,10 @@
     src: URL('/fonts/uncut-sans/Webfonts/UncutSans-Regular.woff2') format('woff2');
   }
 
+  .wrapper {
+    padding: 3vh;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -118,10 +124,11 @@
     color: #FEF2FF; /* Highlight color from guide */
     font-family: 'spacegrotesk', Arial, sans-serif;
   }
-  main {
-    width: 100%;
-    height: 100%;
+  .main {
+    margin: 5vh;
+    height: 82vh;
     display: flex;
+    gap: 4vh;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -140,17 +147,16 @@
   }
 
   .header {
-        display: flex;
+    display: flex;
     align-items: center;
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
     text-align: left;
-    font-size: 6rem;
+    font-size: 4vh;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #6A5FDB; /* Accent B from guide */
     margin: 10px 0;
-    padding-left: 20px;
     font-family: 'pilowlava';
   }
 
@@ -158,7 +164,7 @@
     color: #FF5053; /* Primary color from guide */
     margin-left: 10px;
     font-family: 'uncut-sans';
-    font-size: 12rem;
+    font-size: 6vh;
   }
 
   .logo {
@@ -168,7 +174,7 @@
   }
 
   .logo img {
-    max-width: 40vw;
+    width: 20vw;
     max-height: 20vh;
   }
 
@@ -180,8 +186,7 @@
   }
 
   .title {
-    height: 95%;
-    font-size: 18rem;
+    font-size: 9vh;
     line-height: 1.1;
     color: #FEF2FF; /* Highlight color from guide */
     text-align: center;
@@ -195,9 +200,5 @@
     margin-top: -3rem;
   }
 
-  .main {
-    padding: 5rem;
-    height: 100vh;
-  }
 </style>
 
