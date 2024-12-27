@@ -7,47 +7,67 @@
   export let time = "";
   export let roomId = 0;
 
-        let upcomingTalk 
+  let upcomingTalk 
   let interval;
   let error = false;
+  let status;
 
-  // Function to fetch and process schedule
   async function fetchSchedule() {
-    try {
-      const response = await fetch("https://pretalx.riat.at/38c3/schedule/v/0.10/widgets/schedule.json");
-      if (!response.ok) {
-        throw new Error(`Error fetching schedule: ${response.statusText}`);
-      }
-      const data = await response.json();
-
-      // Extract upcoming events for the specified room
-      let now = new Date();
-      //now = Date.parse('27 Dec 2024 18:00:00 GMT');
-
-     const events = data.talks
-        .filter(talk => talk.room === parseInt(roomId))
-        .filter(talk => Date.parse(talk.start) > now)
-        .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
-
-      // Set title and time for the next upcoming event
-      if (events.length > 0) {
-        title = events[0].title;
-        time = new Date(events[0].start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
-
-        const nextTalkStart = new Date(events[0].start);
-        upcomingTalk = nextTalkStart - now <= 3600000 && nextTalkStart > now;
-        console.log(nextTalkStart, now)
-      } else {
-        title = "No upcoming events";
-        time = "";
-        upcomingTalk = false;
-      }
-    } catch (error) {
-      console.error("Failed to fetch or process schedule:", error);
-      title = "Error fetching schedule";
-      time = "";
+  try {
+    const response = await fetch("https://pretalx.riat.at/38c3/schedule/v/0.15/widgets/schedule.json");
+    if (!response.ok) {
+      throw new Error(`Error fetching schedule: ${response.statusText}`);
     }
+    const data = await response.json();
+
+    // Extract upcoming events for the specified room
+    let now = new Date();
+    //now = Date.parse('27 Dec 2024 18:00:00 GMT');
+
+    const events = data.talks
+      .filter(talk => talk.room === parseInt(roomId))
+      .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+
+    // Set default values
+    title = "No upcoming events";
+    time = "";
+    status = "free";
+
+    // Determine the status
+    if (events.length > 0) {
+      for (const talk of events) {
+        const talkStart = new Date(talk.start);
+        const talkEnd = new Date(talk.end);
+
+        if (talkStart <= now && now <= talkEnd) {
+          // Current talk
+          title = talk.title;
+          time = new Date(talk.start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
+          status = "current";
+          break;
+        } else if (talkStart > now) {
+          // Upcoming talk
+          title = talk.title;
+          time = talkStart.toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
+          if (talkStart - now <= 3600000) {
+            status = "upcoming";
+          }
+          break;
+        }
+      }
+    }
+
+    console.log({ status, title, time, status });
+  } catch (error) {
+    console.error("Failed to fetch or process schedule:", error);
+    title = "Error fetching schedule";
+    time = "";
+    status = "free";
   }
+}
+
+
+  
 
   onMount(() => {
 
@@ -70,11 +90,12 @@
     // Cleanup interval on component destroy
     return () => clearInterval(interval);
   });
+
 </script>
 
 <div class="wrapper">
   <div class="main">
-    {#if upcomingTalk}
+    {#if status == "current" }
       <div class="header">
         <div>
           What's happening 
@@ -87,13 +108,21 @@
       {:else}
         <div class="title">{title}</div>
       {/if}
-    {:else}
-    <div class="signup">
-      <div>Free spot</div>
-      <div>Run your session now</div>
-      <img src="/images/qr_signup.png" />
-    </div>
-
+    {:else if status == "upcoming" }
+      <div class="header">
+        <div>
+         Coming up 
+          <div class="time">{time}</div>
+        </div>
+        <div class="logo"><img src="/images/cdc.png" /></div>
+      </div>
+        <div class="title">{title}</div>
+     {:else }
+      <div class="signup">
+        <div>Free spot</div>
+        <div>Run your session now</div>
+        <img src="/images/qr_signup.png" />
+      </div>
     {/if}
  </div>
 </div>
@@ -214,6 +243,7 @@
   }
   .signup img {
     margin-top: 3vh;
+    height: 70%;
   }
 
   .title {
