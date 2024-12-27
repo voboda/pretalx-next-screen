@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // For getting query parameters in SvelteKit
 
-  export let room = ""; // Room ID passed as a GET variable
   export let title = "";
   export let time = "";
   export let roomId = 0;
@@ -11,6 +10,11 @@
   let interval;
   let error = false;
   let status;
+  const ROOMS = [
+    "CDC Mini-Stage",
+    "CDC Pentagon",
+    "CDC Circle"
+    ]
 
   async function fetchSchedule() {
   try {
@@ -116,7 +120,8 @@
         </div>
         <div class="logo"><img src="/images/cdc.png" /></div>
       </div>
-        <div class="title">{title}</div>
+      <div class="title">{title}
+      </div>
      {:else }
       <div class="signup">
         <div>Free spot</div>
@@ -125,8 +130,13 @@
       </div>
     {/if}
     <div class="footer">
-      Full schedule
+      <div class="room">
+        {ROOMS[roomId]}
+      </div>
+      <div class="qr">
       <img src="/images/qr_schedule.png" />
+      Full schedule
+      </div>
     </div>
  </div>
 </div>
@@ -158,9 +168,33 @@
 
   .wrapper {
     padding: 3vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wrapper::before {
+    content: '';
+    position: absolute;
+    height: 200%;
+    width: 200%;
+    transform: translate(-50%, -50%);
+    background: url('/images/blob-freeform-5.svg') no-repeat center/contain;
+    animation: rotate 70s linear infinite; /* Slow rotation */
+    z-index: 0; /* Ensure it stays below the content */
+  }
+
+  /* Rotation animation */
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   :global(body) {
+    background-color: #0F000A; /* Background color from guide */
     margin: 0;
     padding: 0;
     display: flex;
@@ -168,7 +202,6 @@
     justify-content: space-between;
     align-items: center;
     height: 100vh;
-    background-color: #0F000A; /* Background color from guide */
     color: #FEF2FF; /* Highlight color from guide */
     font-family: 'spacegrotesk', Arial, sans-serif;
   }
@@ -180,7 +213,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0F000A; /* Example background color */
     color: #FEF2FF; /* Example text color */
     font-family: Arial, sans-serif;
 
@@ -211,8 +243,18 @@
   .footer {
     display: flex;
     align-items: center;
-    gap: 3vw;
-    width: 40%;
+    justify-content: space-between; /* Ensures time and logo align properly */
+    width: 100%;
+    text-align: left;
+    color: #6A5FDB; /* Accent B from guide */
+  }
+
+  .footer .qr {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures time and logo align properly */
+    align-items: center;
+    gap: 2vh;
     text-align: left;
     font-size: 3vh;
     letter-spacing: 2px;
@@ -221,8 +263,8 @@
     font-family: 'uncut-sans';
   }
 
-  .footer img {
-     height: 18vh;
+  .footer .qr img {
+    height: 18vh;
   }
 
   .time {
@@ -257,8 +299,9 @@
     text-align:center;
   }
 
-  .signup > div:first-child {
-    font-size: 60%;
+  .footer .room, .signup > div:first-child {
+    font-family: 'space-mono';
+    font-size: 4vh;
     text-transform: uppercase;
     color: #6A5FDB; /* Accent B from guide */
   }
