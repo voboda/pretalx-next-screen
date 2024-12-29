@@ -53,7 +53,7 @@
           // Upcoming talk
           title = talk.title;
           time = talkStart.toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
-          if (talkStart - now <= 3600000) {
+          if (talkStart - now <= 360000000) {
             status = "upcoming";
           }
           break;
@@ -140,13 +140,7 @@
         Full schedule
       </div>
     </div>
-    {:else if roomId != 1}
-    <div class="signup">
-      <div>Free spot @ {ROOMS[roomId-1]}</div>
-      <div>Run your session now</div>
-      <img src="/images/qr_signup.png" />
-    </div>
-    {:else}
+   {:else}
     <div class="header">
       <div>
         {ROOMS[roomId]}
