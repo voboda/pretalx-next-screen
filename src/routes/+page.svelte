@@ -140,13 +140,24 @@
         Full schedule
       </div>
     </div>
-    {:else }
+    {:else if roomId != 1}
     <div class="signup">
       <div>Free spot @ {ROOMS[roomId-1]}</div>
       <div>Run your session now</div>
       <img src="/images/qr_signup.png" />
     </div>
-    {/if}
+    {:else}
+    <div class="header">
+      <div>
+        {ROOMS[roomId]}
+      </div>
+      <div class="logo"><img src="/images/cdc.png" /></div>
+    </div>
+      <div class="qr">
+        <img src="/images/qr_schedule.png" />
+        Events Schedule
+      </div>
+     {/if}
   </div>
 </div>
 
@@ -181,7 +192,7 @@
     z-index: 1;
     overflow: hidden;
     aspect-ratio: 16 / 9;
-    width: 95%;
+    width: 97%;
   }
 
   .wrapper::before {
@@ -261,7 +272,7 @@
     color: #6A5FDB; /* Accent B from guide */
   }
 
-  .footer .qr {
+   .qr {
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Ensures time and logo align properly */
@@ -275,7 +286,7 @@
     font-family: 'uncut-sans';
   }
 
-  .footer .qr img {
+  .qr img {
     height: 18vh;
   }
 
