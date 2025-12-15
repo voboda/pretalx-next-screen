@@ -38,7 +38,6 @@
       .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
 
     next_events = [];
-    let event = {};
     // Set default values
     title = "No upcoming events";
     time = "";
@@ -47,6 +46,7 @@
     // Determine the status
     if (events.length > 0) {
       for (const talk of events) {
+        let event = {};
         const talkStart = new Date(talk.start);
         const talkEnd = new Date(talk.end);
 
@@ -127,26 +127,29 @@
         </div>
     </div>
   {#each next_events as event, idx}
-    <div class="event{idx}">
-    {#if event.status == "current" }
-        <div>
-          What's happening 
-          <div class="time">{event.time}</div>
+    {#if (event)}
+
+      <div class="event{idx}">
+      {#if event.status == "current" }
+          <div>
+            What's happening 
+            <div class="time">{event.time}</div>
+          </div>
+        {#if error}
+        <div class="title">{error}</div>
+        {:else}
+        <div class="title">{event.title}</div>
+        {/if}
+      {:else if event.status == "upcoming" }
+          <div>
+            Coming up 
+            <div class="time">{event.time}</div>
+          </div>
+        <div class="title">{event.title}
         </div>
-      {#if error}
-      <div class="title">{error}</div>
-      {:else}
-      <div class="title">{event.title}</div>
       {/if}
-    {:else if event.status == "upcoming" }
-        <div>
-          Coming up 
-          <div class="time">{event.time}</div>
-        </div>
-      <div class="title">{event.title}
       </div>
     {/if}
-    </div>
   {/each}
    <div class="footer">
      <div> {ROOMS[roomId-1]} </div>
