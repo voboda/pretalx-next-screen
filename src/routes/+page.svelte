@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // For getting query parameters in SvelteKit
+  // TODO: fix typeMotions, this is not working
   import { typeMotions } from "$lib/type-motions";
   export let title = "";
   export let time = "";
@@ -20,6 +21,7 @@
 
   async function fetchSchedule() {
   try {
+    // TODO: change the url bellow for the new one (39c3)
     const response = await fetch("https://pretalx.riat.at/38c3/schedule/widgets/schedule.json");
     if (!response.ok) {
       throw new Error(`Error fetching schedule: ${response.statusText}`);
@@ -28,6 +30,7 @@
 
     // Extract upcoming events for the specified room
     let now = new Date();
+    // TODO: comment the line bellow
     now = Date.parse('28 Dec 2024 14:16:00 GMT');
 
     const events = data.talks
@@ -85,7 +88,9 @@
 
   onMount(() => {
 
+    // TODO: fix typeMotions
     typeMotions();
+
     // Extract room query parameter from the URL
     const queryParams = new URLSearchParams(location.search);
     roomId = parseInt(queryParams.get("room"), 10);
@@ -154,6 +159,7 @@
 </div>
 
 <style>
+/* TODO: refactoring, move the included design to its own css file and import it.
 /* include design from https://l5yth.github.io/39c3-cdc/39C3-Embeds/39C3-TypeMotions.css */
   @font-face {
     font-family: 'KarioDuplexVar';
