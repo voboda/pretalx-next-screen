@@ -128,9 +128,5 @@ export function typeMotions() {
     initialiseRipples();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialise);
-  } else {
-    initialise();
-  }
+  initialise();
 };
