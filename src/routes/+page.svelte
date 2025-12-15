@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // For getting query parameters in SvelteKit
-
   export let title = "";
   export let time = "";
   export let roomId = 0;
+  export let next_events = [];
 
   let upcomingTalk 
   let interval;
@@ -15,6 +15,7 @@
     "CDC Pentagon",
     "CDC Circle",
     ]
+  const next_events_to_display = 3;
 
   async function fetchSchedule() {
   try {
@@ -26,12 +27,14 @@
 
     // Extract upcoming events for the specified room
     let now = new Date();
-    //now = Date.parse('27 Dec 2024 18:00:00 GMT');
+    // now = Date.parse('28 Dec 2024 14:16:00 GMT');
 
     const events = data.talks
       .filter(talk => talk.room === parseInt(roomId))
       .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
 
+    next_events = [];
+    let event = {};
     // Set default values
     title = "No upcoming events";
     time = "";
@@ -48,7 +51,9 @@
           title = talk.title;
           time = new Date(talk.start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
           status = "current";
-          break;
+          event = {title, time, status};
+          next_events.push(event);
+
         } else if (talkStart > now) {
           // Upcoming talk
           title = talk.title;
@@ -56,12 +61,16 @@
           if (talkStart - now <= 360000000) {
             status = "upcoming";
           }
+          event = {title, time, status};
+          next_events.push(event);
+        }
+        if (next_events.length >= next_events_to_display) {
           break;
         }
       }
     }
 
-    console.log({ status, title, time, status });
+    console.log(next_events);
   } catch (error) {
     console.error("Failed to fetch or process schedule:", error);
     title = "Error fetching schedule";
@@ -99,59 +108,39 @@
 
 <div class="wrapper">
   <div class="main">
-    {#if status == "current" }
     <div class="header">
-      <div>
-        What's happening 
-        <div class="time">{time}</div>
-      </div>
+      <div class="room"> {ROOMS[roomId-1]} </div>
       <div class="logo"><img src="/images/cdc.png" /></div>
     </div>
-    {#if error}
-    <div class="title">{error}</div>
-    {:else}
-    <div class="title">{title}</div>
+  {#each next_events as event, idx}
+    <div class="event{idx}">
+    {#if event.status == "current" }
+        <div>
+          What's happening 
+          <div class="time">{event.time}</div>
+        </div>
+      {#if error}
+      <div class="title">{error}</div>
+      {:else}
+      <div class="title">{event.title}</div>
+      {/if}
+    {:else if event.status == "upcoming" }
+        <div>
+          Coming up 
+          <div class="time">{event.time}</div>
+        </div>
+      <div class="title">{event.title}
+      </div>
     {/if}
-    <div class="footer">
-      <div class="room">
-        {ROOMS[roomId-1]}
-      </div>
-      <div class="qr">
-        <img src="/images/qr_schedule.png" />
-        Full schedule
-      </div>
     </div>
-    {:else if status == "upcoming" }
-    <div class="header">
-      <div>
-        Coming up 
-        <div class="time">{time}</div>
-      </div>
-      <div class="logo"><img src="/images/cdc.png" /></div>
+  {/each}
+   <div class="footer">
+     <div> {ROOMS[roomId-1]} </div>
+     <div class="qr">
+      <img src="/images/qr_schedule.png" />
+      Events Schedule
+     </div>
     </div>
-    <div class="title">{title}
-    </div>
-    <div class="footer">
-      <div class="room">
-        {ROOMS[roomId-1]}
-      </div>
-      <div class="qr">
-        <img src="/images/qr_schedule.png" />
-        Full schedule
-      </div>
-    </div>
-   {:else}
-    <div class="header">
-      <div>
-        {ROOMS[roomId]}
-      </div>
-      <div class="logo"><img src="/images/cdc.png" /></div>
-    </div>
-      <div class="qr">
-        <img src="/images/qr_schedule.png" />
-        Events Schedule
-      </div>
-     {/if}
   </div>
 </div>
 
@@ -224,7 +213,7 @@
   }
   .main {
     margin: 5vh;
-    height: 82vh;
+    /* height: 82vh; */
     display: flex;
     gap: 4vh;
     flex-direction: column;
@@ -243,17 +232,32 @@
     overflow: hidden;
   }
 
+  .event0 {
+    font-family: 'spacegrotesk', Arial, sans-serif;
+    color: #6A5FDB; /* Accent B from guide */
+    width: 100%;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .event1, .event2, .event3 {
+    font-family: 'spacegrotesk', Arial, sans-serif;
+    color: #6A5FDB; /* Accent B from guide */
+    width: 100%;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
   .header {
-    display: flex;
     align-items: center;
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
     text-align: left;
-    font-size: 4vh;
+    font-size: 3vh;
     letter-spacing: 2px;
     text-transform: uppercase;
+    margin: 0;
     color: #6A5FDB; /* Accent B from guide */
-    margin: 10px 0;
     font-family: 'pilowlava';
   }
 
@@ -264,6 +268,7 @@
     width: 100%;
     text-align: left;
     color: #6A5FDB; /* Accent B from guide */
+    font-family: 'pilowlava';
   }
 
    .qr {
@@ -273,7 +278,7 @@
     align-items: center;
     gap: 2vh;
     text-align: left;
-    font-size: 3vh;
+    font-size: 2vh;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 10px 0;
@@ -281,14 +286,14 @@
   }
 
   .qr img {
-    height: 18vh;
+    height: 14vh;
   }
 
   .time {
     color: #FF5053; /* Primary color from guide */
     margin-left: 10px;
     font-family: 'uncut-sans';
-    font-size: 6vh;
+    font-size: 3vh;
   }
 
   .logo {
@@ -298,15 +303,15 @@
   }
 
   .logo img {
-    width: 20vw;
-    max-height: 20vh;
+    width: 10;
+    max-height: 5vh;
   }
 
   .header + .time {
     display: inline-block;
     position: relative;
     left: 0;
-    top: -20px;
+    top: 0;
   }
 
   .signup {
@@ -328,7 +333,7 @@
   }
 
   .title {
-    font-size: 9vh;
+    font-size: 4vh;
     line-height: 1.1;
     color: #FEF2FF; /* Highlight color from guide */
     text-align: center;
@@ -339,7 +344,7 @@
     align-items: center;
     width: 100%;
     font-family: 'space-mono';
-    margin-top: -3rem;
+    margin-top: 0.5rem;
   }
 
 </style>
