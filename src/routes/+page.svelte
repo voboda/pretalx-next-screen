@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // For getting query parameters in SvelteKit
+  import { typeMotions } from "$lib/type-motions";
   export let title = "";
   export let time = "";
   export let roomId = 0;
@@ -19,7 +20,7 @@
 
   async function fetchSchedule() {
   try {
-    const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
+    const response = await fetch("https://pretalx.riat.at/38c3/schedule/widgets/schedule.json");
     if (!response.ok) {
       throw new Error(`Error fetching schedule: ${response.statusText}`);
     }
@@ -27,7 +28,7 @@
 
     // Extract upcoming events for the specified room
     let now = new Date();
-    // now = Date.parse('28 Dec 2024 14:16:00 GMT');
+    now = Date.parse('28 Dec 2024 14:16:00 GMT');
 
     const events = data.talks
       .filter(talk => talk.room === parseInt(roomId))
@@ -84,6 +85,7 @@
 
   onMount(() => {
 
+    typeMotions();
     // Extract room query parameter from the URL
     const queryParams = new URLSearchParams(location.search);
     roomId = parseInt(queryParams.get("room"), 10);
@@ -102,7 +104,9 @@
 
     // Cleanup interval on component destroy
     return () => clearInterval(interval);
+
   });
+
 
 </script>
 
@@ -110,7 +114,12 @@
   <div class="main">
     <div class="header">
       <div class="room"> {ROOMS[roomId-1]} </div>
-      <div class="logo"><img src="/images/cdc.png" /></div>
+        <div class="cdc-embed">
+          <p class="cdc-type anim9"><span>39C3</span></p>
+        </div>
+        <div class="cdc-embed">
+          <p class="cdc-type anim6"><span>C</span><span>D</span><span>C</span></p>
+        </div>
     </div>
   {#each next_events as event, idx}
     <div class="event{idx}">
@@ -145,29 +154,164 @@
 </div>
 
 <style>
+/* include design from https://l5yth.github.io/39c3-cdc/39C3-Embeds/39C3-TypeMotions.css */
   @font-face {
-    font-family: 'pilowlava';
-    src: URL('/fonts/pilowlava/Fonts/webfonts/Pilowlava-Regular.woff2') format('woff2');
+    font-family: 'KarioDuplexVar';
+    src: URL('/fonts/Kario/Kario39C3VarWEB-Roman.woff2') format('woff2');
+    src: URL('/fonts/Kario/Kario39C3VarWEB-Roman.woff') format('woff');
+    src: URL('/fonts/Kario/Kario39C3Var-Roman.ttf') format('truetype');
   }
 
-  @font-face {
-    font-family: 'spacegrotesk';
-    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Regular.woff2') format('woff2');
-    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Bold.woff2') format('woff2');
-    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Light.woff2') format('woff2');
-    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-Medium.woff2') format('woff2');
-    src: URL('/fonts/space-grotesk-1.1.4/webfont/SpaceGrotesk-SemiBold.woff2') format('woff2');
+  @keyframes font_weight_wave {
+    from {
+      font-weight: 10;
+    }
+    to {
+      font-weight: 100;
+    }
   }
 
-  @font-face {
-    font-family: 'space-mono';
-    src: URL('/fonts/space-mono/SpaceMono-Regular.ttf') format('truetype');
+  .cdc-embed {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2.5rem;
   }
-
-  @font-face {
-    font-family: 'uncut-sans';
-    src: URL('/fonts/uncut-sans/Webfonts/UncutSans-Regular.woff2') format('woff2');
+  
+  .cdc-type {
+    font-family: 'KarioDuplexVar', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 52pt;
+    font-weight: 10;
+    font-kerning: none;
+    margin: 0;
+    line-height: 1.05;
   }
+  
+  .cdc-type span {
+    display: inline-block;
+  }
+  .anim1 span,
+  .anim1_5 span,
+  .anim2 span,
+  .anim3 span,
+  .anim4 span,
+  .anim5 span,
+  .anim6 span,
+  .anim7 span,
+  .anim8 span,
+  .anim9 span,
+  .anim10 span,
+  .anim11 span {
+    animation: font_weight_wave 3s ease-in-out 0s infinite alternate both;
+  }
+  
+  .anim2,
+  .anim3,
+  .anim10 {
+    display: inline-block;
+    text-align: left;
+  }
+  
+  .anim10 :not(:first-child) {
+    font-size: 48pt;
+    display: inline-block;
+    margin-top: 0.8em;
+    transform: scale(1, 2);
+  }
+  
+  .anim10 span:first-child {
+    font-size: 36pt;
+    font-height: 150%;
+    margin-bottom: 0.1em;
+    display: inline-block;
+    transform: scale(1, 2.5);
+  }
+  
+  .anim1 span:nth-child(1) { animation-delay: -0.1s; }
+  .anim1 span:nth-child(2) { animation-delay: -0.2s; }
+  .anim1 span:nth-child(3) { animation-delay: -0.3s; }
+  .anim1 span:nth-child(4) { animation-delay: -0.4s; }
+  .anim1 span:nth-child(5) { animation-delay: -0.5s; }
+  .anim1 span:nth-child(6) { animation-delay: -0.6s; }
+  .anim1 span:nth-child(7) { animation-delay: -0.7s; }
+  .anim1 span:nth-child(8) { animation-delay: -0.8s; }
+  .anim1 span:nth-child(9) { animation-delay: -0.9s; }
+  .anim1 span:nth-child(10) { animation-delay: -1.0s; }
+  .anim1 span:nth-child(11) { animation-delay: -1.1s; }
+  .anim1 span:nth-child(12) { animation-delay: -1.2s; }
+  .anim1 span:nth-child(13) { animation-delay: -1.3s; }
+  .anim1 span:nth-child(14) { animation-delay: -1.4s; }
+  .anim1 span:nth-child(15) { animation-delay: -1.5s; }
+  .anim1 span:nth-child(16) { animation-delay: -1.6s; }
+  .anim1 span:nth-child(17) { animation-delay: -1.7s; }
+  .anim1 span:nth-child(18) { animation-delay: -1.8s; }
+  .anim1 span:nth-child(19) { animation-delay: -1.9s; }
+  .anim1 span:nth-child(20) { animation-delay: -2.0s; }
+  .anim1 span:nth-child(21) { animation-delay: -2.1s; }
+  .anim1 span:nth-child(22) { animation-delay: -2.2s; }
+  .anim1 span:nth-child(23) { animation-delay: -2.3s; }
+  .anim1 span:nth-child(24) { animation-delay: -2.4s; }
+  .anim1 span:nth-child(25) { animation-delay: -2.5s; }
+  .anim1 span:nth-child(26) { animation-delay: -2.6s; }
+  .anim1 span:nth-child(27) { animation-delay: -2.7s; }
+  .anim1 span:nth-child(28) { animation-delay: -2.8s; }
+  .anim1 span:nth-child(29) { animation-delay: -2.9s; }
+  .anim1 span:nth-child(30) { animation-delay: -3.0s; }
+  .anim1 span:nth-child(31) { animation-delay: -3.1s; }
+  .anim1 span:nth-child(32) { animation-delay: -3.2s; }
+  .anim1 span:nth-child(33) { animation-delay: -3.3s; }
+  .anim1 span:nth-child(34) { animation-delay: -3.4s; }
+  .anim1 span:nth-child(35) { animation-delay: -3.5s; }
+  .anim1 span:nth-child(36) { animation-delay: -3.6s; }
+  .anim1 span:nth-child(37) { animation-delay: -3.7s; }
+  .anim1 span:nth-child(38) { animation-delay: -3.8s; }
+  
+  .anim10 span:nth-child(2) { animation-delay: -0.2s; }
+  .anim10 span:nth-child(3) { animation-delay: -0.3s; }
+  .anim10 span:nth-child(4) { animation-delay: -0.4s; }
+  .anim10 span:nth-child(5) { animation-delay: -0.5s; }
+  .anim10 span:nth-child(6) { animation-delay: -0.6s; }
+  .anim10 span:nth-child(7) { animation-delay: -0.7s; }
+  .anim10 span:nth-child(8) { animation-delay: -0.8s; }
+  .anim10 span:nth-child(9) { animation-delay: -0.9s; }
+  .anim10 span:nth-child(10) { animation-delay: -1.0s; }
+  .anim10 span:nth-child(11) { animation-delay: -1.1s; }
+  .anim10 span:nth-child(12) { animation-delay: -1.2s; }
+  .anim10 span:nth-child(13) { animation-delay: -1.3s; }
+  .anim10 span:nth-child(14) { animation-delay: -1.4s; }
+  
+  .anim6 span:nth-child(1) { animation-delay: -0.5s; }
+  .anim6 span:nth-child(2) { animation-delay: -1.0s; }
+  .anim6 span:nth-child(3) { animation-delay: -1.5s; }
+  .anim6 span:nth-child(4) { animation-delay: -2.0s; }
+  .anim6 span:nth-child(5) { animation-delay: -2.5s; }
+  .anim6 span:nth-child(6) { animation-delay: -3.0s; }
+  .anim6 span:nth-child(7) { animation-delay: -3.5s; }
+  .anim6 span:nth-child(8) { animation-delay: -4.0s; }
+  .anim6 span:nth-child(9) { animation-delay: -4.5s; }
+  .anim6 span:nth-child(10) { animation-delay: -5.0s; }
+  .anim6 span:nth-child(11) { animation-delay: -5.5s; }
+  .anim6 span:nth-child(12) { animation-delay: -6.0s; }
+  .anim6 span:nth-child(13) { animation-delay: -6.5s; }
+  .anim6 span:nth-child(14) { animation-delay: -7.0s; }
+  .anim6 span:nth-child(15) { animation-delay: -7.5s; }
+  .anim6 span:nth-child(16) { animation-delay: -8.0s; }
+  
+  .anim7 span:nth-child(odd) { animation-delay: -3.0s; }
+  .anim7 span:nth-child(even) { animation-delay: 0.0s; }
+  
+  .anim8 span:nth-child(2n)   { animation-delay: -3.0s; }
+  .anim8 span:nth-child(2n+1) { animation-delay: -1.5s; }
+  .anim8 span:nth-child(2n+2) { animation-delay:  0.0s; }
+  
+  .black {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    min-height: 4em;
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+  /* end include */
 
   .wrapper {
     padding: 3vh;
@@ -181,11 +325,6 @@
   .wrapper::before {
     content: '';
     position: absolute;
-    height: 200%;
-    width: 200%;
-    transform: translate(-50%, -50%);
-    background: url('/images/blob-freeform-5.svg') no-repeat center/contain;
-    animation: rotate 70s linear infinite; /* Slow rotation */
     z-index: 0; /* Ensure it stays below the content */
   }
 
@@ -200,7 +339,7 @@
   }
 
   :global(body) {
-    background-color: #0F000A; /* Background color from guide */
+    background-color: #000; /* Background color from guide */
     margin: 0;
     padding: 0;
     display: flex;
@@ -208,8 +347,8 @@
     justify-content: space-between;
     align-items: center;
     height: 100vh;
-    color: #FEF2FF; /* Highlight color from guide */
-    font-family: 'spacegrotesk', Arial, sans-serif;
+    color: #fff; /* Highlight color from guide */
+    font-family: 'KarioDuplexVar';
   }
   .main {
     margin: 5vh;
@@ -219,8 +358,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #FEF2FF; /* Example text color */
-    font-family: Arial, sans-serif;
 
     /* Aspect Ratio Constraint */
     aspect-ratio: 16 / 9; /* Modern browsers */
@@ -233,16 +370,12 @@
   }
 
   .event0 {
-    font-family: 'spacegrotesk', Arial, sans-serif;
-    color: #6A5FDB; /* Accent B from guide */
     width: 100%;
     text-transform: uppercase;
     margin: 0;
   }
 
   .event1, .event2, .event3 {
-    font-family: 'spacegrotesk', Arial, sans-serif;
-    color: #6A5FDB; /* Accent B from guide */
     width: 100%;
     text-transform: uppercase;
     margin: 0;
@@ -257,8 +390,6 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 0;
-    color: #6A5FDB; /* Accent B from guide */
-    font-family: 'pilowlava';
   }
 
   .footer {
@@ -267,8 +398,6 @@
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
     text-align: left;
-    color: #6A5FDB; /* Accent B from guide */
-    font-family: 'pilowlava';
   }
 
    .qr {
@@ -282,7 +411,6 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 10px 0;
-    font-family: 'uncut-sans';
   }
 
   .qr img {
@@ -291,9 +419,7 @@
   }
 
   .time {
-    color: #FF5053; /* Primary color from guide */
     margin-left: 10px;
-    font-family: 'uncut-sans';
     font-size: 3vh;
   }
 
@@ -316,17 +442,14 @@
   }
 
   .signup {
-    font-family: 'space-mono';
     font-size: 7vh;
     line-height: 1.1;
     text-align:center;
   }
 
   .footer .room, .signup > div:first-child {
-    font-family: 'space-mono';
     font-size: 4vh;
     text-transform: uppercase;
-    color: #6A5FDB; /* Accent B from guide */
   }
   .signup img {
     margin-top: 3vh;
@@ -336,7 +459,6 @@
   .title {
     font-size: 4vh;
     line-height: 1.1;
-    color: #FEF2FF; /* Highlight color from guide */
     text-align: center;
     margin: 0;
     flex-grow: 1;
@@ -344,7 +466,6 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    font-family: 'space-mono';
     margin-top: 0.5rem;
   }
 
