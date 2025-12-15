@@ -282,6 +282,7 @@
 
   .qr img {
     height: 18vh;
+    border-radius: 5px;
   }
 
   .time {
