@@ -103,7 +103,7 @@
       console.error("Room ID not provided or invalid");
       return;
     }
-    roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1]);
+    roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
 
     // Initial fetch
     fetchSchedule();
@@ -132,8 +132,8 @@
             <span>CDC</span>
             <span>&lt;&lt;CCC</span>
             <span>39C3</span>
-            <span>&lt;&lt;CCC</span>
-            <span>39C3<br></span>
+            <!-- <span>&lt;&lt;CCC</span> -->
+            <!-- <span>39C3</span> -->
           </p>
           <p class="cdc-type anim7">
             <span>39C3</span>
@@ -142,8 +142,8 @@
             <span>&lt;&lt;CCC</span>
             <span>39C3</span>
             <span>&lt;&lt;CCC</span>
-            <span>39C3</span>
-            <span>&lt;&lt;CCC<br></span>
+            <!-- <span>39C3</span> -->
+            <!-- <span>&lt;&lt;CCC</span> -->
           </p>
         </div>
       </div>
@@ -222,12 +222,11 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 100vh;
     color: #fff; /* Highlight color from guide */ 
     font-family: 'KarioDuplexVar';
   }
   .main {
-    margin: 3vh;
+    margin: 2vh;
     height: 82vh;
     display: flex;
     gap: 1vh;
@@ -263,7 +262,6 @@
     width: 100%;
     text-align: left;
     font-size: 3vh;
-    /* letter-spacing: 2px; */
     text-transform: uppercase;
     margin: 0;
   }
@@ -279,18 +277,16 @@
    .qr {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Ensures time and logo align properly */
     align-items: center;
-    gap: 2vh;
+    gap: 1vh;
     text-align: left;
     font-size: 2vh;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin: 10px 0;
   }
 
   .qr img {
-    height: 14vh;
+    height: 10vh;
     border-radius: 5px;
   }
 
