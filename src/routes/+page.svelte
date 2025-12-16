@@ -17,6 +17,8 @@
     "CDC Pentagon",
     "CDC Circle",
     ]
+
+  // this is hardcoded with the grid layout
   const next_events_to_display = 3;
 
   async function fetchSchedule() {
@@ -84,16 +86,12 @@
     }
   }
 
+  // helper function to split a string into spans for the type motion design
   function splitStringToSpans(str) {
     return str.split('').map(letter => `<span>${letter}</span>`).join('');
   }
 
-
-  
-
   onMount(() => {
-
-
     // Extract room query parameter from the URL
     const queryParams = new URLSearchParams(location.search);
     roomId = parseInt(queryParams.get("room"), 10);
@@ -108,7 +106,9 @@
     // Initial fetch
     fetchSchedule();
 
+    // calling our type motions design js script
     typeMotions();
+
     // Set interval to fetch every minute
     interval = setInterval(fetchSchedule, 60000);
 
@@ -116,244 +116,187 @@
     return () => clearInterval(interval);
 
   });
-
-
 </script>
 
-<div class="wrapper">
-  <div class="main">
-    <div class="header">
-      <div class="cdc-embed">
-        <div class="black">
-          <p class="cdc-type anim7">
-            <span>&lt;&lt;CCC</span>
-            <span>39C3</span>
-            <span>&lt;&lt;CCC</span>
-            <span>CDC</span>
-            <span>&lt;&lt;CCC</span>
-            <span>39C3</span>
-            <!-- <span>&lt;&lt;CCC</span> -->
-            <!-- <span>39C3</span> -->
-          </p>
-          <p class="cdc-type anim7">
-            <span>39C3</span>
-            <span>&lt;&lt;CCC</span>
-            <span>CDC</span>
-            <span>&lt;&lt;CCC</span>
-            <span>39C3</span>
-            <span>&lt;&lt;CCC</span>
-            <!-- <span>39C3</span> -->
-            <!-- <span>&lt;&lt;CCC</span> -->
-          </p>
-        </div>
+<div class="container">
+  <div class="header">
+    <div class="cdc-embed">
+      <div class="black">
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
       </div>
     </div>
+  </div>
   {#each next_events as event, idx}
-    {#if (event)}
-      <div class="event{idx}">
+  {#if (event)}
+  <div class="event{idx}_time">
       {#if event.status == "current" }
-          <div class="left">
             What's happening 
             <div class="time">{event.time}</div>
-          </div>
-        {#if error}
-        <div class="title">{error}</div>
-        {:else}
-        <div class="cdc-embed">
-          <div class="cdc-type anim1">
-            <div class="title">
-              <span>
-               {event.title}
-              </span>
-            </div>
-          </div>
-        </div>
-        {/if}
       {:else if event.status == "upcoming" }
-          <div class="left">
             Coming up 
             <div class="time">{event.time}</div>
-          </div>
-          <div class="cdc-embed">
-            <div class="cdc-type anim1">
-              <div class="title">
-              <span>
-               {event.title}
-              </span>
-            </div>
-          </div>
-        </div>
       {/if}
+  </div>
+  <div class="event{idx}_title">
+    {#if error}
+      {error}
+    {:else}
+      <div class="cdc-embed">
+        <div class="cdc-type anim1">
+            <span>
+             {event.title}
+            </span>
+        </div>
       </div>
     {/if}
+  </div>
+  {/if}
   {/each}
-   <div class="footer">
-     <div class="qr">
-     <div class="cdc-embed">
-       <div class="cdc-type anim1 anim1_5" bind:this={roomSpan}> </div> 
-     </div>
-     Room
-</div>
-     <div class="qr">
-      <img src="/images/qr_schedule.png" />
-      Events Schedule
-     </div>
+  <div class="logo">
+    <div class="cdc-embed">
+      <p class="cdc-type anim1 anim11">
+        <span>&lt;&lt;toggle</span>
+      </p>
     </div>
+  </div>
+  <div class="room">
+    <div class="cdc-embed">
+      <div class="cdc-type anim1 anim1_5" bind:this={roomSpan}> </div> 
+    </div>
+
+    <div>Room</div>
+  </div>
+  <div class="qr">
+    <img src="/images/qr_schedule.png" />
+    <div>Events Schedule</div>
   </div>
 </div>
 
 <style>
-/* TODO: make sure the css allow for a clean display on any size of screen */
+@import '$lib/type-motions.css';
 
-  @import '$lib/type-motions.css';
+:global(body) {
+  background-color: #000;
+  color: #fff;
+}
 
-  .wrapper {
-    padding: 2vh;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-    width: 97%;
-  }
+.container {  
 
-  :global(body) {
-    background-color: #000; /* Background color from guide */ 
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff; /* Highlight color from guide */ 
-    font-family: 'KarioDuplexVar';
-  }
-  .main {
-    margin: 2vh;
-    height: 82vh;
-    display: flex;
-    gap: 1vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  aspect-ratio: 16 / 9; /* Modern browsers */
+  max-height: 100vh; /* Ensure it doesn’t overflow */  
+  max-width: 100vw;
+  font-family: 'KarioDuplexVar';
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  gap: 2vh;
+  grid-auto-flow: row;
+  background-color: #000;
+  color: #fff;
+  text-align: left;
+  grid-template-areas:
+    "header header header header"
+    "event0_time event0_title event0_title event0_title"
+    "event1_time event1_title event1_title event1_title"
+    "event2_time event2_title event2_title event2_title"
+    "logo room room qr";
+}
 
-    /* Aspect Ratio Constraint */
-    aspect-ratio: 16 / 9; /* Modern browsers */ 
-    max-height: 100vh; /* Ensure it doesn’t overflow */ 
-    max-width: 100vw;
+.header { 
+  grid-area: header; 
+  text-align: center;
+  margin: 1vh;
+}
 
-    /* For browsers that don't support aspect-ratio */
-    position: relative;
-    overflow: hidden;
-  }
-  .left {
-    width: 10vw;
-  }
+.event0_title { 
+  grid-area: event0_title; 
+  font-size: 3vh;
+  text-transform: uppercase;
+}
 
-  .event0 {
-    width: 100%;
-    text-transform: uppercase;
-    text-align: center;
-    margin: 0;
-    gap: 2vw;
-    display: flex;
-    flex-direction: row;
-  }
+.event0_title span {
+  font-size: 5vh;
+  margin-right: 1vw;
+}
 
-  .event1, .event2, .event3 {
-    width: 100%;
-    text-transform: uppercase;
-    text-align: center;
-    margin: 0;
-    gap: 2vw;
-    display: flex;
-    flex-direction: row;
-  }
+.event0_time { 
+  grid-area: event0_time; 
+  text-align: center;
+  font-size: 3vh;
+}
 
-  .header {
-    align-items: center;
-    justify-content: space-between; /* Ensures time and logo align properly */
-    width: 100%;
-    text-align: center;
-    font-size: 3vh;
-    text-transform: uppercase;
-    margin: 0;
-  }
+.event1_title { 
+  grid-area: event1_title; 
+  font-size: 3vh;
+  text-transform: uppercase;
+}
 
-  .footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Ensures time and logo align properly */
-    width: 100%;
-    text-align: left;
-    margin-top: 2vh;
-  }
+.event1_title span {
+  font-size: 5vh;
+  margin-right: 1vw;
+}
 
-   .qr {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1vh;
-    text-align: left;
-    font-size: 2vh;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+.event1_time { 
+  grid-area: event1_time; 
+  text-align: center;
+  font-size: 3vh;
+}
 
-  .qr img {
-    height: 10vh;
-    border-radius: 5px;
-  }
+.event2_title { 
+  grid-area: event2_title; 
+  font-size: 3vh;
+  text-transform: uppercase;
+}
 
-  .time {
-    margin-left: 10px;
-    font-size: 3vh;
-  }
+.event2_title span {
+  font-size: 5vh;
+  margin-right: 1vw;
+}
 
-  .logo {
-    display: flex;
-    justify-content: flex-end; /* Align the logo to the right */
-    align-items: center;
-  }
+.event2_time { 
+  grid-area: event2_time; 
+  text-align: center;
+  font-size: 3vh;
+}
 
-  .logo img {
-    width: 10;
-    max-height: 5vh;
-  }
+.logo {
+  grid-area: logo; 
+  text-align: center;
+  margin: 1vh;
+}
 
-  /* .header + .time { */
-  /*   display: inline-block; */
-  /*   position: relative; */
-  /*   left: 0; */
-  /*   top: 0; */
-  /* } */
+.room { 
+  grid-area: room; 
+  text-align: center;
+  margin: 1vh;
+}
 
-  .signup {
-    font-size: 7vh;
-    line-height: 1.1;
-    text-align:center;
-  }
+.qr {
+  grid-area: qr; 
+  text-align: center;
+  margin-bottom: 2vh;
+}
 
-  .footer .room, .signup > div:first-child {
-    font-size: 4vh;
-    text-transform: uppercase;
-  }
-  .signup img {
-    margin-top: 3vh;
-    height: 70%;
-  }
-
-  .title {
-    font-size: 4vh;
-    line-height: 1.1;
-    text-align: center;
-    margin: 0;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-
+.qr img { 
+  height: 15vh;
+  border-radius: 5px;
+  margin-bottom: 2vh;
+}
+ 
 </style>
 
