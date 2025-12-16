@@ -179,7 +179,7 @@
     <div>Room</div>
   </div>
   <div class="qr">
-    <img src="/images/qr_schedule.png" />
+    <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
     <div>Events Schedule</div>
   </div>
 </div>
