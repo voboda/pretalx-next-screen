@@ -69,7 +69,7 @@
 
 .anim10 span:first-child {
   font-size: 36pt;
-  font-height: 150%;
+  font-weight: 150%;
   margin-bottom: 0.1em;
   display: inline-block;
   transform: scale(1, 2.5);
