@@ -23,9 +23,7 @@
 
   async function fetchSchedule() {
     try {
-      // TODO: change the url bellow for the new one (39c3)
-      // const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
-      const response = await fetch("https://pretalx.riat.at/38c3/schedule/widgets/schedule.json");
+      const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
       if (!response.ok) {
         throw new Error(`Error fetching schedule: ${response.statusText}`);
       }
@@ -33,8 +31,7 @@
   
       // Extract upcoming events for the specified room
       let now = new Date();
-      // TODO: comment the line bellow
-      now = Date.parse('28 Dec 2024 14:16:00 GMT');
+      // now = Date.parse('28 Dec 2024 14:16:00 GMT');
   
       const events = data.talks
         .filter(talk => talk.room === parseInt(roomId))
