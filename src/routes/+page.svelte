@@ -150,10 +150,9 @@
     </div>
   {#each next_events as event, idx}
     {#if (event)}
-
       <div class="event{idx}">
       {#if event.status == "current" }
-          <div>
+          <div class="left">
             What's happening 
             <div class="time">{event.time}</div>
           </div>
@@ -171,7 +170,7 @@
         </div>
         {/if}
       {:else if event.status == "upcoming" }
-          <div>
+          <div class="left">
             Coming up 
             <div class="time">{event.time}</div>
           </div>
@@ -189,9 +188,12 @@
     {/if}
   {/each}
    <div class="footer">
+     <div class="qr">
      <div class="cdc-embed">
        <div class="cdc-type anim1 anim1_5" bind:this={roomSpan}> </div> 
      </div>
+     Room
+</div>
      <div class="qr">
       <img src="/images/qr_schedule.png" />
       Events Schedule
@@ -243,24 +245,35 @@
     position: relative;
     overflow: hidden;
   }
+  .left {
+    width: 10vw;
+  }
 
   .event0 {
     width: 100%;
     text-transform: uppercase;
+    text-align: center;
     margin: 0;
+    gap: 2vw;
+    display: flex;
+    flex-direction: row;
   }
 
   .event1, .event2, .event3 {
     width: 100%;
     text-transform: uppercase;
+    text-align: center;
     margin: 0;
+    gap: 2vw;
+    display: flex;
+    flex-direction: row;
   }
 
   .header {
     align-items: center;
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
-    text-align: left;
+    text-align: center;
     font-size: 3vh;
     text-transform: uppercase;
     margin: 0;
@@ -272,6 +285,7 @@
     justify-content: space-between; /* Ensures time and logo align properly */
     width: 100%;
     text-align: left;
+    margin-top: 2vh;
   }
 
    .qr {
@@ -306,12 +320,12 @@
     max-height: 5vh;
   }
 
-  .header + .time {
-    display: inline-block;
-    position: relative;
-    left: 0;
-    top: 0;
-  }
+  /* .header + .time { */
+  /*   display: inline-block; */
+  /*   position: relative; */
+  /*   left: 0; */
+  /*   top: 0; */
+  /* } */
 
   .signup {
     font-size: 7vh;
