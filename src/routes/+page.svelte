@@ -12,9 +12,15 @@
   let interval;
   let error = false;
   let status;
+  // 2024 rooms
+  // const ROOMS = [
+  //   "CDC Mini-Stage",
+  //   "CDC Pentagon",
+  //   "CDC Circle",
+  //   ]
+  // 2025 rooms
   const ROOMS = [
-    "CDC Mini-Stage",
-    "CDC Pentagon",
+    "CDC Triangle",
     "CDC Circle",
     ]
 
