@@ -7,6 +7,8 @@
   export let roomId = 0;
   export let roomSpan = '';
   export let next_events = [];
+  // signup is disable by default, it get enabled if a query parameter "signup_enable" is set to any value 
+  export let signup_enable = false;
 
   let upcomingTalk 
   let interval;
@@ -98,6 +100,9 @@
     // Extract room query parameter from the URL
     const queryParams = new URLSearchParams(location.search);
     roomId = parseInt(queryParams.get("room"), 10);
+    
+    // setting the query param "signup_enable" to any value activate the signup
+    signup_enable = queryParams.get("signup_enable")?true:false;
 
     if (!roomId) {
       title = "Please specify ?room=X in the url";
@@ -171,11 +176,16 @@
   {/if}
   {/each}
   <div class="logo">
+    {#if signup_enable}
+    <img src="/images/qr_signup.png" alt="https://pretalx.riat.at/39c3/cfp?access_code=LASTMINUTESUBMISSIONS8XPRLFLT8"/>
+    <div>Submit an Event</div>
+    {:else}
     <div class="cdc-embed">
       <p class="cdc-type anim1 anim11">
         <span>&lt;&lt;toggle</span>
       </p>
     </div>
+    {/if}
   </div>
   <div class="room">
     <div class="cdc-embed">
@@ -280,7 +290,13 @@
 .logo {
   grid-area: logo; 
   text-align: center;
-  margin: 1vh;
+  margin-bottom: 2vh;
+}
+
+.logo img { 
+  height: 15vh;
+  border-radius: 5px;
+  margin-bottom: 2vh;
 }
 
 .room { 
