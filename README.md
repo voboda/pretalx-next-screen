@@ -47,3 +47,14 @@ You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an
 > [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Usage
+
+Enter the url of the deployed production build on a web browser on a screen to
+display the upcoming event of a room.
+
+There are 2 query parameters:
+
+- room= 1 or 2 (there are only 2 rooms for 39c3), this one is mandatory
+- signup_enable= 1 (or whatever, just setting it is enough), this one is
+  optionnal, if you don't set it, the signup qr code will not be displayed
