@@ -6,25 +6,14 @@
   export let time = "";
   export let roomId = 0;
   export let roomSpan = '';
+  export let room;
+  export let roomName = '';
   export let next_events = [];
 
   let upcomingTalk 
   let interval;
   let error = false;
   let status;
-  // 2024 rooms
-  // const ROOMS = [
-  //   "CDC Mini-Stage",
-  //   "CDC Pentagon",
-  //   "CDC Circle",
-  //   ]
-  // 2025 rooms
-  const ROOMS = [
-    "CDC Triangle",
-    "CDC Circle",
-    ]
-
-  // this is hardcoded with the grid layout
   const next_events_to_display = 3;
 
   async function fetchSchedule() {
@@ -35,14 +24,22 @@
       }
       const data = await response.json();
   
+      console.log('data', data)
       // Extract upcoming events for the specified room
       let now = new Date();
       // now = Date.parse('28 Dec 2024 14:16:00 GMT');
   
+      room = data.rooms
+         .filter(room => room.id == parseInt(roomId)).pop()
+
+      roomName = room?.name?.en;
+
+      console.log('room', room)
       const events = data.talks
         .filter(talk => talk.room === parseInt(roomId))
         .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
   
+      console.log('events', events)
       next_events = [];
       // Set default values
       title = "No upcoming events";
@@ -104,7 +101,7 @@
       console.error("Room ID not provided or invalid");
       return;
     }
-    roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
+    //roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
 
     // Initial fetch
     fetchSchedule();
@@ -123,38 +120,9 @@
 
 <div class="container">
   <div class="header">
-    <div class="cdc-embed">
-      <div class="black">
-        <p class="cdc-type anim7">
-          <span>&lt;&lt;CCC</span>
-          <span>39C3</span>
-          <span>&lt;&lt;CCC</span>
-          <span>CDC</span>
-          <span>&lt;&lt;CCC</span>
-          <span>39C3</span>
-        </p>
-        <p class="cdc-type anim7">
-          <span>39C3</span>
-          <span>&lt;&lt;CCC</span>
-          <span>CDC</span>
-          <span>&lt;&lt;CCC</span>
-          <span>39C3</span>
-          <span>&lt;&lt;CCC</span>
-        </p>
-      </div>
-    </div>
-  </div>
+ </div>
   {#each next_events as event, idx}
   {#if (event)}
-  <div class="event{idx}_time">
-      {#if event.status == "current" }
-            What's happening 
-            <div class="time">{event.time}</div>
-      {:else if event.status == "upcoming" }
-            Coming up 
-            <div class="time">{event.time}</div>
-      {/if}
-  </div>
   <div class="event{idx}_title">
     {#if error}
       {error}
@@ -164,25 +132,26 @@
             <span>
              {event.title}
             </span>
+            <div class="time">{event.time}</div>
         </div>
       </div>
     {/if}
   </div>
   {/if}
   {/each}
-  <div class="logo">
     <div class="cdc-embed">
-      <p class="cdc-type anim1 anim11">
-        <span>&lt;&lt;toggle</span>
-      </p>
+      <div class="black">
+      </div>
     </div>
+ 
+  <div class="logo">
+        <p class="cdc-type anim7">
+        </p>
   </div>
   <div class="room">
     <div class="cdc-embed">
-      <div class="cdc-type anim1 anim1_5" bind:this={roomSpan}> </div> 
+      <div class="cdc-type anim1 anim1_5">{roomName} </div> 
     </div>
-
-    <div>Room</div>
   </div>
   <div class="qr">
     <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
@@ -214,10 +183,10 @@
   text-align: left;
   grid-template-areas:
     "header header header header"
-    "event0_time event0_title event0_title event0_title"
-    "event1_time event1_title event1_title event1_title"
-    "event2_time event2_title event2_title event2_title"
-    "logo room room qr";
+    "event0_title event0_title event0_title event0_title"
+    "event1_title event1_title event1_title event1_title"
+    "event2_title event2_title event2_title event2_title"
+    "qr room room room";
 }
 
 .header { 
