@@ -19,10 +19,10 @@
   //   "CDC Circle",
   //   ]
   // 2025 rooms
-  const ROOMS = [
-    "CDC Triangle",
-    "CDC Circle",
-    ]
+  const ROOMS = {
+    4: "CDC Triangle",
+    5: "CDC Circle",
+  }
 
   // this is hardcoded with the grid layout
   const next_events_to_display = 3;
@@ -104,7 +104,7 @@
       console.error("Room ID not provided or invalid");
       return;
     }
-    roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
+    roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId].toUpperCase());
 
     // Initial fetch
     fetchSchedule();
