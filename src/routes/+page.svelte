@@ -110,7 +110,8 @@
     typeMotions();
 
     // Set interval to fetch every minute
-    interval = setInterval(fetchSchedule, 60000);
+    //interval = setInterval(fetchSchedule, 60000);
+    interval = setInterval(() => window.location.reload(), 60000);
 
     // Cleanup interval on component destroy
     return () => clearInterval(interval);
