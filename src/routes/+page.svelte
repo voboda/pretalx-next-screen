@@ -102,6 +102,7 @@
       return;
     }
     //roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
+    document.body.style.backgroundColor = "#000000";
 
     // Initial fetch
     fetchSchedule();
@@ -129,12 +130,10 @@
       {error}
     {:else}
       <div class="cdc-embed">
-        <div class="cdc-type anim1">
-            <span>
+        <div class="cdc-type anim1_5 event_title">
              {event.title}
-            </span>
-            <div class="time">{event.time}</div>
         </div>
+        <div class="cdc-type anim1"><span>{event.time}</span></div>
       </div>
     {/if}
   </div>
@@ -165,6 +164,7 @@
 
 :global(body) {
   background-color: #000;
+  background-color: #fff;
   color: #fff;
 }
 
@@ -194,6 +194,10 @@
   grid-area: header; 
   text-align: center;
   margin: 1vh;
+}
+
+.event_title {
+  font-size: 5vh;
 }
 
 .event0_title { 
