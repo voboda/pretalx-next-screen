@@ -131,9 +131,11 @@
     {:else}
       <div class="cdc-embed">
         <div class="cdc-type anim1_5 event_title">
+             <span>
              {event.title}
+             </span>
         </div>
-        <div class="cdc-type anim1"><span>{event.time}</span></div>
+        <div class="time"><span>{event.time}</span></div>
       </div>
     {/if}
   </div>
@@ -149,13 +151,12 @@
         </p>
   </div>
   <div class="room">
-    <div class="cdc-embed">
-      <div class="cdc-type anim1 anim1_5">{roomName} </div> 
-    </div>
+      <div class="roomname">{roomName} 
+      </div>
   </div>
   <div class="qr">
     <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-    <div>Events Schedule</div>
+    <div class="supporting">Full Schedule</div>
   </div>
 </div>
 
@@ -171,11 +172,11 @@
 .container {  
 
   aspect-ratio: 16 / 9; /* Modern browsers */
-  max-height: 100vh; /* Ensure it doesn’t overflow */  
-  max-width: 100vw;
+  max-height: 95vh; /* Ensure it doesn’t overflow */  
+  max-width: 95vw;
   font-family: 'KarioDuplexVar';
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr ;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   gap: 2vh;
   grid-auto-flow: row;
@@ -183,11 +184,10 @@
   color: #fff;
   text-align: left;
   grid-template-areas:
-    "header header header header"
-    "event0_title event0_title event0_title event0_title"
-    "event1_title event1_title event1_title event1_title"
-    "event2_title event2_title event2_title event2_title"
-    "qr room room room";
+    "event0_title event0_title event0_title "
+    "event1_title event1_title event1_title "
+    "event2_title event2_title event2_title "
+    "room room qr";
 }
 
 .header { 
@@ -211,6 +211,10 @@
   margin-right: 1vw;
 }
 
+.time {
+    padding: 0px;
+    margin: 0px;
+  }
 .event0_time { 
   grid-area: event0_time; 
   text-align: center;
@@ -259,14 +263,25 @@
 
 .room { 
   grid-area: room; 
-  text-align: center;
+  text-align: left;
   margin: 1vh;
+
+}
+.roomname {
+  margin-top: 6vh;
+  font-size: 7vh ;
+  text-transform: uppercase;
 }
 
+.supporting {
+  font-weight: 300;
+  font-size: 2vh;
+  }
 .qr {
   grid-area: qr; 
-  text-align: center;
+  text-align: right;
   margin-bottom: 2vh;
+
 }
 
 .qr img { 
@@ -275,5 +290,8 @@
   margin-bottom: 2vh;
 }
  
+ .cdc-type {
+    margin-top: 5vh;
+  }
 </style>
 

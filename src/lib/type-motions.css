@@ -17,7 +17,7 @@
 .cdc-embed {
   display: inline-flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: .5rem;
 }
 
 .cdc-type {
