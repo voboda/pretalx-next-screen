@@ -121,42 +121,37 @@
 </script>
 
 <div class="container">
-  <div class="header">
- </div>
-  {#each next_events as event, idx}
-  {#if (event)}
-  <div class="event{idx}_title">
-    {#if error}
-      {error}
-    {:else}
-      <div class="cdc-embed">
-        <div class="cdc-type anim1_5 event_title">
-             <span>
-             {event.title}
-             </span>
+  <div class="grid">
+    {#each next_events as event, idx}
+    {#if (event)}
+    <div class="event{idx}_title">
+      {#if error}
+        {error}
+      {:else}
+        <div class="cdc-embed">
+          <div class="cdc-type anim1_5 event_title">
+              <span>
+              {event.title}
+              </span>
+          </div>
+          <div class="time"><span>{event.time}</span></div>
         </div>
-        <div class="time"><span>{event.time}</span></div>
-      </div>
-    {/if}
-  </div>
-  {/if}
-  {/each}
-    <div class="cdc-embed">
-      <div class="black">
-      </div>
+      {/if}
     </div>
- 
-  <div class="logo">
-        <p class="cdc-type anim7">
-        </p>
-  </div>
-  <div class="room">
-      <div class="roomname">{roomName} 
-      </div>
-  </div>
-  <div class="qr">
-    <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-    <div class="supporting">Full Schedule</div>
+    {/if}
+    {/each}
+    <div class="room">
+        <div class="roomname">{roomName} 
+        </div>
+    </div>
+    <div class="qr qr_schedule">
+      <img src="/images/qr_signup.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
+      <div class="supporting">Submit talk</div>
+    </div>
+    <div class="qr qr_signup">
+      <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
+      <div class="supporting">Full Schedule</div>
+    </div>
   </div>
 </div>
 
@@ -165,39 +160,40 @@
 
 :global(body) {
   background-color: #000;
-  background-color: #fff;
   color: #fff;
 }
 
 .container {  
-
   aspect-ratio: 16 / 9; /* Modern browsers */
-  max-height: 95vh; /* Ensure it doesn’t overflow */  
+  max-height: 93cqh; /* Ensure it doesn’t overflow */  
   max-width: 95vw;
+  overflow: hidden;
   font-family: 'KarioDuplexVar';
+  container-type: inline-size;
+  container-name: main-container;
+}
+
+.grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr ;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto minmax(0, 1fr) auto; 
   gap: 2vh;
   grid-auto-flow: row;
   background-color: #000;
   color: #fff;
   text-align: left;
+  overflow-y: auto;
+  min-height: 0;
+  max-width: 100%;
   grid-template-areas:
-    "event0_title event0_title event0_title "
-    "event1_title event1_title event1_title "
-    "event2_title event2_title event2_title "
-    "room room qr";
-}
-
-.header { 
-  grid-area: header; 
-  text-align: center;
-  margin: 1vh;
+    "event0_title event0_title event0_title event0_title event0_title"
+    "event1_title event1_title event1_title event1_title event1_title"
+    "event2_title event2_title event2_title event2_title event2_title"
+    "room room room qr_signup qr_schedule";
 }
 
 .event_title {
-  font-size: 5vh;
+  font-size: 3cqh;
 }
 
 .event0_title { 
@@ -207,7 +203,7 @@
 }
 
 .event0_title span {
-  font-size: 5vh;
+  font-size: 3cqh;
   margin-right: 1vw;
 }
 
@@ -228,7 +224,7 @@
 }
 
 .event1_title span {
-  font-size: 5vh;
+  font-size: 3cqh;
   margin-right: 1vw;
 }
 
@@ -245,7 +241,7 @@
 }
 
 .event2_title span {
-  font-size: 5vh;
+  font-size: 3cqh;
   margin-right: 1vw;
 }
 
@@ -264,12 +260,12 @@
 .room { 
   grid-area: room; 
   text-align: left;
-  margin: 1vh;
+  margin: 1cqh;
 
 }
 .roomname {
-  margin-top: 6vh;
-  font-size: 7vh ;
+  margin-top: 6cqh;
+  font-size: 7cqh ;
   text-transform: uppercase;
 }
 
@@ -277,21 +273,25 @@
   font-weight: 300;
   font-size: 2vh;
   }
-.qr {
-  grid-area: qr; 
-  text-align: right;
-  margin-bottom: 2vh;
 
+.qr_schedule, .qr_signup {
+  margin-bottom: 2vh;
+}
+.qr_signup{
+  grid-area: qr_signup; 
+}
+
+.qr_schedule {
+  grid-area: qr_schedule; 
 }
 
 .qr img { 
-  height: 15vh;
-  border-radius: 5px;
+  height: 13cqh; border-radius: 5px;
   margin-bottom: 2vh;
 }
  
  .cdc-type {
-    margin-top: 5vh;
+    margin-top: 3cqh;
   }
 </style>
 
