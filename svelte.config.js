@@ -6,6 +6,9 @@ const config = {
     adapter: adapter({
       runtime: 'nodejs20.x',
     }),
+    version: {
+      name: process.env.npm_package_version
+    },
   }
 };
 

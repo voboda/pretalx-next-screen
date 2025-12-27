@@ -9,6 +9,7 @@
   export let room;
   export let roomName = '';
   export let next_events = [];
+  export let current_version = "";
 
   let upcomingTalk 
   let interval;
@@ -18,6 +19,24 @@
 
   async function fetchSchedule() {
     try {
+
+      // we refresh the page on a new version deployed
+      // const version_url = "http://localhost:5173/version";
+      const version_url = "https://pretalx-next-screen.vercel.app/version";
+      const version_response = await fetch(version_url);
+      if (!version_response.ok) {
+        throw new Error(`Error fetching schedule: ${version_response.statusText}`);
+      }
+      const version_json = await version_response.json();
+      const version = version_json.version;
+      if (current_version == "") {
+        current_version = version;
+      } else if (current_version != version) {
+        current_version = version;
+        window.location.reload();
+      }
+      console.log(current_version);
+
       const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
       if (!response.ok) {
         throw new Error(`Error fetching schedule: ${response.statusText}`);
