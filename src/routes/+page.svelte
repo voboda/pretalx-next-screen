@@ -40,7 +40,7 @@
         .filter(talk => talk.room === room.id)
         .sort((a, b) => new Date(a.start) - new Date(b.start));
       
-      // Get next 3 talks (current or upcoming)
+      // Get next talks (current or upcoming)
       const nextTalks = [];
       for (const talk of roomTalks) {
         const talkStart = new Date(talk.start);
@@ -55,7 +55,7 @@
             status: isCurrent ? "current" : "upcoming"
           });
           
-          if (nextTalks.length === 3) break;
+          if (nextTalks.length === next_events_to_display) break;
         }
       }
       
@@ -161,6 +161,8 @@
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
         </p>
@@ -172,11 +174,16 @@
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
         </p>
          <p class="cdc-type anim7">
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
@@ -185,34 +192,67 @@
         <p class="cdc-type anim7">
           <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
         </p>
-         <p class="cdc-type anim7">
+  <p class="cdc-type anim1">
+          <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+          <p class="cdc-type anim7">
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>39C3</span>
           <span>&lt;&lt;CCC</span>
-        </p>
-        <p class="cdc-type anim7">
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           </p>
         <p class="cdc-type anim7">
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
@@ -221,28 +261,46 @@
         </p>
         <p class="cdc-type anim7">
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CHAOS</span>
           <span>CDC</span>
           <span>&lt;&lt;CCC</span>
-          <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
         </p>
          <p class="cdc-type anim7">
+          <span>C</span>
           <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>39C3</span>
-          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>39C3</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
         </p>
          <p class="cdc-type anim7">
-          <span>&lt;&lt;CCC</span>
-          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
           <span>&lt;&lt;CCC</span>
           <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>&lt;&lt;CCC</span>
           <span>39C3</span>
@@ -259,6 +317,8 @@
   color: #fff;
   background: #000;
   position: relative;
+  overflow: hidden;
+
 }
 
 .container {  
@@ -270,7 +330,7 @@
   font-family: 'KarioDuplexVar';
   margin: 0 auto;
 
-  container-type: inline-size;
+  container-type: size;
   container-name: main-container;
   display: grid;
 }
@@ -294,7 +354,7 @@
 }
 
 .event_title {
-  font-size: 3cqh;
+  font-size: 4cqh;
   text-transform: uppercase;
 }
 
@@ -356,16 +416,22 @@
 .logo {
   grid-area: logo; 
   text-align: center;
-  font-size: 2cqh;
+  font-size: 6cqh;
 }
 .logo .toggle {
   font-size: 8cqh;
 }
+.logo span {
+  font-size: 3cqh;
+
+  }
 .togglething {
   display: flex;
   flex-direction: row;
   align-items: center;
-    gap: 1cqw;
+    justify-content: center;
+
+  gap: 2cqw;
 
 }
 
@@ -380,6 +446,7 @@
 .room0, .room1 {
   text-align: left;
   margin: 1cqh;
+  overflow-y: hidden;
 }
 .roomname {
   font-size: 2cqh ;
