@@ -116,7 +116,7 @@
           {#if error}
             {error}
           {:else}
-            <div class="cdc-embed">
+            <div class="talk cdc-embed">
               <div class="cdc-type anim1_5 event_title">
                   <span>
                   {talk.title}
@@ -130,11 +130,11 @@
       {/each}
       <div class="qr qr_schedule">
         <img src="/images/qr_signup.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-        <div class="supporting">Submit talk</div>
+        <div class="supporting">submit talk</div>
       </div>
       <div class="qr qr_signup">
         <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-        <div class="supporting">Full Schedule</div>
+        <div class="supporting">full schedule</div>
       </div>
 
       <div class="logo">
@@ -475,6 +475,9 @@
   margin-bottom: 2vh;
 }
 
+.talk {
+    margin-bottom: 3cqh;
+  }
 .background {
   position: absolute;
   top: -10vh;
