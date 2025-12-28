@@ -281,7 +281,11 @@
   grid-template-rows: auto minmax(0, 1fr) auto; 
   gap: 2vh;
   grid-auto-flow: row;
-  color: #fff; text-align: left; overflow-y: auto; min-height: 0;
+  color: #fff; 
+  text-align: left; 
+  overflow-y: auto; 
+  min-height: 0;
+  font-size: 3cqh;
   grid-template-areas:
     "room0 room0 center room1 room1 "
     "room0 room0 center room1 room1 "
