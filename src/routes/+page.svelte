@@ -14,98 +14,78 @@
   let interval;
   let error = false;
   let status;
+
+  export let events;
+
+  let rooms = {};
   const next_events_to_display = 3;
 
   async function fetchSchedule() {
-    try {
-      const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
-      if (!response.ok) {
-        throw new Error(`Error fetching schedule: ${response.statusText}`);
-      }
-      const data = await response.json();
-  
-      console.log('data', data)
-      // Extract upcoming events for the specified room
-      let now = new Date();
-      // now = Date.parse('28 Dec 2024 14:16:00 GMT');
-  
-      room = data.rooms
-         .filter(room => room.id == parseInt(roomId)).pop()
+  try {
+    const response = await fetch("https://pretalx.riat.at/39c3/schedule/widgets/schedule.json");
+    if (!response.ok) {
+      throw new Error(`Error fetching schedule: ${response.statusText}`);
+    }
+    const data = await response.json();
+    
+    const now = new Date();
+    
 
-      roomName = room?.name?.en;
+    console.log('data',data);
 
-      console.log('room', room)
-      const events = data.talks
-        .filter(talk => talk.room === parseInt(roomId))
-        .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
-  
-      console.log('events', events)
-      next_events = [];
-      // Set default values
-      title = "No upcoming events";
-      time = "";
-      status = "free";
-  
-      // Determine the status
-      if (events.length > 0) {
-        for (const talk of events) {
-          let event = {};
-          const talkStart = new Date(talk.start);
-          const talkEnd = new Date(talk.end);
-  
-          if (talkStart <= now && now <= talkEnd) {
-            // Current talk
-            title = talk.title;
-            time = new Date(talk.start).toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
-            status = "current";
-            event = {title, time, status};
-            next_events.push(event);
-  
-          } else if (talkStart > now) {
-            // Upcoming talk
-            title = talk.title;
-            time = talkStart.toLocaleTimeString('en-De', { hour: '2-digit', minute: '2-digit' });
-            if (talkStart - now <= 360000000) {
-              status = "upcoming";
-            }
-            event = {title, time, status};
-            next_events.push(event);
-          }
-          if (next_events.length >= next_events_to_display) {
-            break;
-          }
+    // Process each room
+    const rooms = data.rooms.map(room => {
+      // Get all talks for this room, sorted by start time
+      const roomTalks = data.talks
+        .filter(talk => talk.room === room.id)
+        .sort((a, b) => new Date(a.start) - new Date(b.start));
+      
+      // Get next 3 talks (current or upcoming)
+      const nextTalks = [];
+      for (const talk of roomTalks) {
+        const talkStart = new Date(talk.start);
+        const talkEnd = new Date(talk.end);
+        
+        // Include if currently happening or starts in the future
+        if (talkEnd >= now) {
+          const isCurrent = talkStart <= now && now <= talkEnd;
+          nextTalks.push({
+            title: talk.title,
+            time: talkStart.toLocaleTimeString('en-DE', { hour: '2-digit', minute: '2-digit' }),
+            status: isCurrent ? "current" : "upcoming"
+          });
+          
+          if (nextTalks.length === 3) break;
         }
       }
-  
-      console.log(next_events);
-    } catch (error) {
-      console.error("Failed to fetch or process schedule:", error);
-      title = "Error fetching schedule";
-      time = "";
-      status = "free";
-    }
+      
+      return {
+        id: room.id,
+        name: room.name.en,
+        talks: nextTalks
+      };
+    });
+
+    console.log('rooms',rooms)
+    
+    return rooms;
+    
+  } catch (error) {
+    console.error("Failed to fetch or process schedule:", error);
+    throw error;
   }
+}
 
   // helper function to split a string into spans for the type motion design
   function splitStringToSpans(str) {
     return str.split('').map(letter => `<span>${letter}</span>`).join('');
   }
 
-  onMount(() => {
-    // Extract room query parameter from the URL
-    const queryParams = new URLSearchParams(location.search);
-    roomId = parseInt(queryParams.get("room"), 10);
-
-    if (!roomId) {
-      title = "Please specify ?room=X in the url";
-      console.error("Room ID not provided or invalid");
-      return;
-    }
-    //roomSpan.innerHTML = splitStringToSpans(ROOMS[roomId-1].toUpperCase());
-    document.body.style.backgroundColor = "#000000";
-
+  onMount(async () => {
     // Initial fetch
-    fetchSchedule();
+    events = await fetchSchedule();
+
+    console.log('events',events)
 
     // calling our type motions design js script
     typeMotions();
@@ -122,55 +102,177 @@
 
 <div class="container">
   <div class="grid">
-    {#each next_events as event, idx}
-    {#if (event)}
-    <div class="event{idx}_title">
-      {#if error}
-        {error}
-      {:else}
-        <div class="cdc-embed">
-          <div class="cdc-type anim1_5 event_title">
-              <span>
-              {event.title}
-              </span>
+    {#each events as room, idx}
+      <div class="room{idx}">
+        {#if error}
+          {error}
+        {:else}
+          <div class="room">
+              <div class="roomname">{room.name} 
+              </div>
           </div>
-          <div class="time"><span>{event.time}</span></div>
+        {/if}
+        {#each room.talks as talk }
+          {#if error}
+            {error}
+          {:else}
+            <div class="cdc-embed">
+              <div class="cdc-type anim1_5 event_title">
+                  <span>
+                  {talk.title}
+                  </span>
+              </div>
+              <div class="time"><span>{talk.time}</span></div>
+            </div>
+          {/if}
+        {/each}
+      </div>
+      {/each}
+      <div class="qr qr_schedule">
+        <img src="/images/qr_signup.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
+        <div class="supporting">Submit talk</div>
+      </div>
+      <div class="qr qr_signup">
+        <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
+        <div class="supporting">Full Schedule</div>
+      </div>
+
+      <div class="logo">
+        <div class="cdc-embed">
+          <p class="togglething cdc-type anim1 anim1_5">
+            <span>enshittify</span>
+            <span class="toggle">&lt;&lt;toggle</span>
+            <span>decentralise</span>
+
+          </p>
+          <div>decentral.community</div>
+
         </div>
-      {/if}
-    </div>
-    {/if}
-    {/each}
-    <div class="room">
-        <div class="roomname">{roomName} 
-        </div>
-    </div>
-    <div class="qr qr_schedule">
-      <img src="/images/qr_signup.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-      <div class="supporting">Submit talk</div>
-    </div>
-    <div class="qr qr_signup">
-      <img src="/images/qr_schedule.png" alt="https://pretalx.riat.at/39c3/schedule/"/>
-      <div class="supporting">Full Schedule</div>
+      </div>
     </div>
   </div>
-</div>
+
+    <div class="background">
+      <div class="cdc-embed">
+      <div class="black">
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+ <p class="cdc-type anim1">
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+         <p class="cdc-type anim7">
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+         <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          </p>
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+        <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+         <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+         <p class="cdc-type anim7">
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>CDC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>&lt;&lt;CCC</span>
+          <span>39C3</span>
+          <span>&lt;&lt;CCC</span>
+        </p>
+           </div>
+    </div>
+    </div>
 
 <style>
 @import '$lib/type-motions.css';
 
 :global(body) {
-  background-color: #000;
   color: #fff;
+  background: #000;
+  position: relative;
 }
 
 .container {  
   aspect-ratio: 16 / 9; /* Modern browsers */
   max-height: 93cqh; /* Ensure it doesn’t overflow */  
-  max-width: 95vw;
+  /* Stop growing locally if the resulting height would exceed the screen height */
+  max-width: calc(100vh * 16 / 9);
   overflow: hidden;
   font-family: 'KarioDuplexVar';
+  margin: 0 auto;
+
   container-type: inline-size;
   container-name: main-container;
+  display: grid;
 }
 
 .grid {
@@ -179,21 +281,17 @@
   grid-template-rows: auto minmax(0, 1fr) auto; 
   gap: 2vh;
   grid-auto-flow: row;
-  background-color: #000;
-  color: #fff;
-  text-align: left;
-  overflow-y: auto;
-  min-height: 0;
-  max-width: 100%;
+  color: #fff; text-align: left; overflow-y: auto; min-height: 0;
   grid-template-areas:
-    "event0_title event0_title event0_title event0_title event0_title"
-    "event1_title event1_title event1_title event1_title event1_title"
-    "event2_title event2_title event2_title event2_title event2_title"
-    "room room room qr_signup qr_schedule";
+    "room0 room0 center room1 room1 "
+    "room0 room0 center room1 room1 "
+    "room0 room0 center room1 room1 "
+    "logo logo logo qr_schedule qr_signup"
 }
 
 .event_title {
   font-size: 3cqh;
+  text-transform: uppercase;
 }
 
 .event0_title { 
@@ -254,18 +352,33 @@
 .logo {
   grid-area: logo; 
   text-align: center;
-  margin: 1vh;
+  font-size: 2cqh;
+}
+.logo .toggle {
+  font-size: 8cqh;
+}
+.togglething {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+    gap: 1cqw;
+
 }
 
-.room { 
-  grid-area: room; 
+.room0 { 
+  grid-area: room0; 
+}
+
+.room1 {
+  grid-area: room1; 
+  }
+
+.room0, .room1 {
   text-align: left;
   margin: 1cqh;
-
 }
 .roomname {
-  margin-top: 6cqh;
-  font-size: 7cqh ;
+  font-size: 2cqh ;
   text-transform: uppercase;
 }
 
@@ -275,6 +388,7 @@
   }
 
 .qr_schedule, .qr_signup {
+  text-align: center;
   margin-bottom: 2vh;
 }
 .qr_signup{
@@ -289,7 +403,24 @@
   height: 13cqh; border-radius: 5px;
   margin-bottom: 2vh;
 }
- 
+
+.background {
+  position: absolute;
+  top: -10vh;
+  left: -10vw;
+  z-index: -100;
+  width: 200vw;
+  height: 200vh;
+  overflow: hidden;
+}
+  .background div {
+  font-size: 10vh;
+  color: #222;
+  }
+    .background .cdc-type {
+    line-height: 0.5;
+    }
+
  .cdc-type {
     margin-top: 3cqh;
   }
